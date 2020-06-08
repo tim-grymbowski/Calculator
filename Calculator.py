@@ -24,7 +24,7 @@ display.insert(0, 0)
 """
 CURRENT: 
 
-This version formally works, but only adds (regardless of the chosen operation). 
+This version can perform basic arithmetic.
 
 It also cannot handle division by 0 yet (probably would crash), and there is no
 button to change sign, you have to create negative numbers manually.
@@ -57,22 +57,24 @@ def add():
     global running_total
 
     display.delete(0, END)
-
-    if old_multiplicative_operator == None:
+    if current_multiplicative_operator == None:
         running_subtotal += current_number
-    
+    elif current_multiplicative_operator == "*":
+        running_subtotal *= current_number
+    else:
+        running_subtotal /= current_number
     old_multiplicative_operator = None
     current_multiplicative_operator = None
 
-    old_additive_operator = current_additive_operator
-    current_additive_operator = "+"
-
-    if old_additive_operator == "+":
+    if current_additive_operator == "+":
         running_total += running_subtotal
     else:
         running_total -= running_subtotal
     running_subtotal = 0
 
+    old_additive_operator = current_additive_operator
+    current_additive_operator = "+"
+    
 def subtract():
     global old_multiplicative_operator
     global running_subtotal
@@ -83,22 +85,24 @@ def subtract():
     global running_total
 
     display.delete(0, END)
-
-    if old_multiplicative_operator == None:
+    if current_multiplicative_operator == None:
         running_subtotal += current_number
-
+    elif current_multiplicative_operator == "*":
+        running_subtotal *= current_number
+    else:
+        running_subtotal /= current_number
     old_multiplicative_operator = None
     current_multiplicative_operator = None
 
-    old_additive_operator = current_additive_operator
-    current_additive_operator = "-"
-
-    if old_additive_operator == "+":
+    if current_additive_operator == "+":
         running_total += running_subtotal
     else:
         running_total -= running_subtotal
     running_subtotal = 0
 
+    old_additive_operator = current_additive_operator
+    current_additive_operator = "-"
+    
 def multiply():
     global old_multiplicative_operator
     global current_multiplicative_operator
@@ -106,19 +110,20 @@ def multiply():
     global current_number
 
     display.delete(0, END)
-    old_multiplicative_operator = current_multiplicative_operator
-    current_multiplicative_operator = "*"
 
-    if old_multiplicative_operator == None:
+    if current_multiplicative_operator == None:
         running_subtotal += current_number
-    elif old_multiplicative_operator == "*":
+    elif current_multiplicative_operator == "*":
         running_subtotal *= current_number
     else:
         """
         insert something here for division by 0
         """
         running_subtotal /= current_number
-
+    
+    old_multiplicative_operator = current_multiplicative_operator
+    current_multiplicative_operator = "*"
+    
 def divide():
     global old_multiplicative_operator
     global current_multiplicative_operator
@@ -126,19 +131,20 @@ def divide():
     global current_number
 
     display.delete(0, END)
-    old_multiplicative_operator = current_multiplicative_operator
-    current_multiplicative_operator = ":"
 
-    if old_multiplicative_operator == None:
+    if current_multiplicative_operator == None:
         running_subtotal += current_number
-    elif old_multiplicative_operator == "*":
+    elif current_multiplicative_operator == "*":
         running_subtotal *= current_number
     else:
         """
         insert something here for division by 0
         """
         running_subtotal /= current_number
-
+    
+    old_multiplicative_operator = current_multiplicative_operator
+    current_multiplicative_operator = ":"
+        
 def equals():
     global old_multiplicative_operator
     global running_subtotal
@@ -149,20 +155,19 @@ def equals():
     global current_additive_operator
 
     display.delete(0, END)
-    if old_multiplicative_operator == None:
+    if current_multiplicative_operator == None:
         running_subtotal += current_number
-    elif old_multiplicative_operator == "*":
+    elif current_multiplicative_operator == "*":
         running_subtotal *= current_number
     else:
         """
         put a try/catch here: "DIVISION BY 0 ERROR"
         """
         running_subtotal /= current_number
-
     old_multiplicative_operator = None
     current_multiplicative_operator = None
 
-    if old_additive_operator == "+":
+    if current_additive_operator == "+":
         running_total += running_subtotal
     else:
         running_total -= running_subtotal
@@ -171,6 +176,7 @@ def equals():
     old_additive_operator = "+"
     current_additive_operator = "+"
     output = None
+    
     if int(running_total) == float(running_total):
         output = int(running_total)
     else:
